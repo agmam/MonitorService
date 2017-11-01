@@ -10,6 +10,7 @@ namespace MonitorService
     {
         static void Main(string[] args)
         {
+            int x ;
         }
     }
 }
