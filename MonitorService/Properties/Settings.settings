@@ -5,5 +5,8 @@
     <Setting Name="WebApiUrl" Type="System.String" Scope="User">
       <Value Profile="(Default)">http://localhost:3937</Value>
     </Setting>
+    <Setting Name="ServerId" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

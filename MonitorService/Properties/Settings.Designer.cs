@@ -34,5 +34,17 @@ namespace MonitorService.Properties {
                 this["WebApiUrl"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int ServerId {
+            get {
+                return ((int)(this["ServerId"]));
+            }
+            set {
+                this["ServerId"] = value;
+            }
+        }
     }
 }

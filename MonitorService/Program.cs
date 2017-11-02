@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Microsoft.VisualBasic.Devices;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace MonitorService
@@ -33,7 +37,7 @@ namespace MonitorService
 
         private static string Username = "server@monitor.dk";
         private static string Password = "server123";
-
+        private static int ServerId = 0;
         static void Main(string[] args)
         {
             upTime = new PerformanceCounter("System", "System Up Time");
@@ -44,11 +48,52 @@ namespace MonitorService
             Console.WriteLine("Main...");
 
             Login(Username, Password);
+
+            Console.WriteLine("Setting up server...");
+            ServerId = Properties.Settings.Default.ServerId;
+           
+          
+            if ( ServerId == 0)
+            {
+                SetupServer();
+            }
+         
+            Console.WriteLine("server ID - ID:"+ ServerId);
             while (true)
             {
                 Thread.Sleep(6000);
                 SendServerInfo();
             }
+        }
+
+        private static void SetupServer()
+        {
+            HttpClient client = new HttpClient();
+            AddHeaders(client);
+
+            try
+            {
+                var name = GetServerName();
+                Server server = new Server()
+                {
+                    ServerName = name
+                };
+                var s = CreateServerAsync(server, client).Result;
+                if (s != null && s.Id > 0)
+                {
+                    Properties.Settings.Default.ServerId = s.Id;
+                    Properties.Settings.Default.Save();
+                    ServerId = s.Id;
+                }
+               
+            }
+            catch (Exception e)
+            {
+                log.Info("SendServerSetup - Error: " + e);
+                Thread.Sleep(5000);
+                Environment.Exit(0);
+            }
+
         }
 
         static async Task SendServerInfo()
@@ -67,7 +112,8 @@ namespace MonitorService
                     RamTotal = Convert.ToInt32(GetTotalMemoryInBytes()),
                     BytesReceived = bytesReceived,
                     BytesSent = bytesSent,
-                    Server = new Server() { ServerName  = GetServerName() }
+                    ServerId = ServerId
+         
                 };
                 bytesSent = 0;
                 bytesReceived = 0;
@@ -96,6 +142,40 @@ namespace MonitorService
                 Thread.Sleep(5000);
                 log.Info("AddHeaders - Error " + e);
             }
+        }
+        static async Task<Server> CreateServerAsync(Server server, HttpClient client)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                Console.WriteLine("Sending server...");
+                response = await client.PostAsJsonAsync("api/Servers", server);
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    Console.WriteLine("Successfully sent");
+                }
+                else
+                {
+                    Console.WriteLine("CreateServerAsync - status code " + response.StatusCode);
+                    log.Info("CreateServerAsync - status code " + response.StatusCode);
+                    
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("CreateServerDetailAsync - Error " + e);
+                log.Info("CreateServerDetailAsync - Error " + e);
+                
+            }
+            if (response != null)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var s = JsonConvert.DeserializeObject<Server>(json);
+
+                // Return the URI of the created resource.
+                return s;
+            }
+            return null;
         }
 
         static async Task<Uri> CreateServerDetailAsync(ServerDetail serverDetails, HttpClient client)
