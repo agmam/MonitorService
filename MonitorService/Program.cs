@@ -45,24 +45,30 @@ namespace MonitorService
             cpuCounter.NextValue(); //always 0
             ramCounter = new PerformanceCounter("Memory", "Available MBytes");
             computerinfo = new ComputerInfo();
+            //Network.getNetworkCardName();
+           
+
+            
             Console.WriteLine("Main...");
 
             Login(Username, Password);
 
             Console.WriteLine("Setting up server...");
             ServerId = Properties.Settings.Default.ServerId;
-           
-          
-            if ( ServerId == 0)
+
+
+            if (ServerId == 0)
             {
                 SetupServer();
             }
-         
-            Console.WriteLine("server ID - ID:"+ ServerId);
+
+            Console.WriteLine("server ID - ID:" + ServerId);
             while (true)
             {
+                var q = Temperature.Temperatures;
                 Thread.Sleep(6000);
-                SendServerInfo();
+                     
+               SendServerInfo();
             }
         }
 
