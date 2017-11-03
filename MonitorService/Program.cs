@@ -23,8 +23,8 @@ namespace MonitorService
 
 
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        
-     
+
+
         static ComputerInfo computerinfo;
         static PerformanceCounter cpuCounter;
         static PerformanceCounter ramCounter;
@@ -46,12 +46,12 @@ namespace MonitorService
             ramCounter = new PerformanceCounter("Memory", "Available MBytes");
             computerinfo = new ComputerInfo();
             //Network.getNetworkCardName();
-           
 
-            
+
+
             Console.WriteLine("Main...");
 
-            Login(Username, Password);
+            //  Login(Username, Password);
 
             Console.WriteLine("Setting up server...");
             ServerId = Properties.Settings.Default.ServerId;
@@ -63,12 +63,15 @@ namespace MonitorService
             }
 
             Console.WriteLine("server ID - ID:" + ServerId);
+            string nc = GetNetworkCard();
+            GetNetworkUtilization(nc);
             while (true)
             {
-                var q = Temperature.Temperatures;
+               
+                // var q = Temperature.Temperatures;
                 Thread.Sleep(6000);
-                     
-               SendServerInfo();
+
+                // SendServerInfo();
             }
         }
 
@@ -91,7 +94,7 @@ namespace MonitorService
                     Properties.Settings.Default.Save();
                     ServerId = s.Id;
                 }
-               
+
             }
             catch (Exception e)
             {
@@ -119,7 +122,7 @@ namespace MonitorService
                     BytesReceived = bytesReceived,
                     BytesSent = bytesSent,
                     ServerId = ServerId
-         
+
                 };
                 bytesSent = 0;
                 bytesReceived = 0;
@@ -164,14 +167,14 @@ namespace MonitorService
                 {
                     Console.WriteLine("CreateServerAsync - status code " + response.StatusCode);
                     log.Info("CreateServerAsync - status code " + response.StatusCode);
-                    
+
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine("CreateServerDetailAsync - Error " + e);
                 log.Info("CreateServerDetailAsync - Error " + e);
-                
+
             }
             if (response != null)
             {
@@ -228,7 +231,7 @@ namespace MonitorService
             return Process.GetCurrentProcess().Threads.Count;
         }
 
-    
+
 
         private static float GetCurrentNetworkSpeed()
         {
@@ -242,37 +245,86 @@ namespace MonitorService
             return performanceCounterSent.NextValue() / 1024;
 
         }
+        public static void WorkThreadFunction()
+        {
+            try
+            {
+                while (true)
+                {
+                    PerformanceCounterCategory category =
+    new PerformanceCounterCategory("Network Interface");
+                    String[] instanceName = category.GetInstanceNames();
+                    foreach (string ns in instanceName)
+                    {
+                        //new sent counter
+                        PerformanceCounter netSentCounter =
+                            new PerformanceCounter("Network Interface", "Bytes Received/sec", ns);
+                        
+                        
+                          
+                        //new recieve counter
+                        PerformanceCounter netRecCounter =
+                            new PerformanceCounter("Network Interface", "Bytes Sent/sec", ns);
+                       
+                        Thread.Sleep(1000);
+                        // write interface
+                        Console.WriteLine("Network Interface: {0}", ns);
+
+                        //write sent
+                        Console.WriteLine("Network Usage (Sent): {0}",
+                            netSentCounter.NextValue() + " Bytes/s");
+
+                        //write recieved
+                        Console.WriteLine("Network Usage (Received): {0}",
+                            netRecCounter.NextValue() + " Bytes/s");
+                        Console.WriteLine("");
+                      
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("thread error:  " + ex);
+            }
+        }
 
         private static int GetNetworkUtilization(string networkCard)
         {
-            const int numberOfIterations = 10;
+            Thread thread = new Thread(new ThreadStart(WorkThreadFunction));
+            thread.Start();
+            
+            return 0;
+            //const int numberOfIterations = 10;
 
-            PerformanceCounter bandwidthCounter = new PerformanceCounter("Network Interface", "Current Bandwidth", networkCard);
-            float bandwidth = bandwidthCounter.NextValue();//valor fixo 10Mb/100Mn/
-            PerformanceCounter dataSentCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", networkCard);
+            //PerformanceCounter bandwidthCounter = new PerformanceCounter("Network Interface", "Current Bandwidth", networkCard);
+            //float bandwidth = bandwidthCounter.NextValue();//valor fixo 10Mb/100Mn/
+            //PerformanceCounter dataSentCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", networkCard);
 
-            PerformanceCounter dataReceivedCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", networkCard);
+            //PerformanceCounter dataReceivedCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", networkCard);
 
-            float sendSum = 0;
-            float receiveSum = 0;
-            for (int index = 0; index < numberOfIterations; index++)
-            {
-                sendSum += dataSentCounter.NextValue();
-                receiveSum += dataReceivedCounter.NextValue();
-            }
-            float dataSent = sendSum;
-            float dataReceived = receiveSum;
-
-
-            //How to do this proper?
-            bytesSent = Convert.ToInt32(dataSent);
-            bytesReceived = Convert.ToInt32(dataReceived);
+            //float sendSum = 0;
+            //float receiveSum = 0;
+            //for (int index = 0; index < numberOfIterations; index++)
+            //{
+            //    sendSum += dataSentCounter.NextValue();
+            //    receiveSum += dataReceivedCounter.NextValue();
+            //}
+            //float dataSent = sendSum;
+            //float dataReceived = receiveSum;
 
 
-            double utilization = (8 * (dataSent + dataReceived)) / (bandwidth * numberOfIterations) * 100;
-            int u = Convert.ToInt32(utilization);
 
-            return u;
+            ////How to do this proper?
+            //bytesSent = Convert.ToInt32(dataSent);
+            //bytesReceived = Convert.ToInt32(dataReceived); 
+            //Console.WriteLine("bytessend:  " + bytesSent  + "    next: "+ dataSentCounter.NextValue());
+            //Console.WriteLine("bytesrecieved:  " + bytesReceived +"    next: "+ dataReceivedCounter.NextValue());
+
+            //double utilization = (8 * (dataSent + dataReceived)) / (bandwidth * numberOfIterations) * 100;
+            //int u = Convert.ToInt32(utilization);
+            //Console.WriteLine("utilization: " + utilization);
+            //return u;
         }
 
         private static ulong GetTotalMemoryInBytes()
