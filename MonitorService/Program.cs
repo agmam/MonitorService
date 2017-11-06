@@ -51,7 +51,7 @@ namespace MonitorService
 
             Console.WriteLine("Main...");
 
-            //  Login(Username, Password);
+              Login(Username, Password);
 
             Console.WriteLine("Setting up server...");
             ServerId = Properties.Settings.Default.ServerId;
@@ -63,15 +63,15 @@ namespace MonitorService
             }
 
             Console.WriteLine("server ID - ID:" + ServerId);
-            string nc = GetNetworkCard();
-            GetNetworkUtilization(nc);
+          //  string nc = GetNetworkCard();
+            //GetNetworkUtilization(nc);
             while (true)
             {
                
                 // var q = Temperature.Temperatures;
                 Thread.Sleep(6000);
 
-                // SendServerInfo();
+                SendServerInfo();
             }
         }
 
