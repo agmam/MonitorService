@@ -22,7 +22,7 @@ namespace MonitorService
                     Double temp = Convert.ToDouble(obj["CurrentTemperature"].ToString());
                     temp = (temp - 2732) / 10.0;
                     result.Add(new Temperature { CurrentValue = temp, InstanceName = obj["InstanceName"].ToString() });
-                    Console.WriteLine("temp: " + temp+ "   instance: " + obj["InstanceName"].ToString());
+                    //Console.WriteLine("temp: " + temp+ "   instance: " + obj["InstanceName"].ToString());
                 }
                 return result;
 

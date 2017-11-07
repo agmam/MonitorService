@@ -20,5 +20,6 @@ namespace MonitorService
         public decimal BytesSent { get; set; }
         public decimal Handles { get; set; }
         public decimal Processes { get; set; }
+        public decimal Temperature { get; set; }
     }
 }

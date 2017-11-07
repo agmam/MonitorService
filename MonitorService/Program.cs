@@ -57,7 +57,7 @@ namespace MonitorService
             ServerId = Properties.Settings.Default.ServerId;
 
 
-            if (ServerId == 0)
+            if (!IsServerInDatabase(ServerId))
             {
                 SetupServer();
             }
@@ -65,11 +65,41 @@ namespace MonitorService
             Console.WriteLine("server ID - ID:" + ServerId);
             while (true)
             {
-                var q = Temperature.Temperatures;
+                //var q = Temperature.Temperatures;
                 Thread.Sleep(6000);
                      
                SendServerInfo();
             }
+        }
+
+        private static bool IsServerInDatabase(int id)
+        {
+            HttpClient client = new HttpClient();
+            AddHeaders(client);
+            HttpResponseMessage response = null;
+            try
+            {
+                Console.WriteLine("geting server...");
+                response =  client.GetAsync("api/Servers/GetServer/"+ id).Result;
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    Console.WriteLine("Successfully");
+                }
+                else
+                {
+                    Console.WriteLine("getServerAsync - status code " + response.StatusCode);
+                    log.Info("getServerAsync - status code " + response.StatusCode);
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("getServerAsync - Error " + e);
+                log.Info("getServerAsync - Error " + e);
+
+            }
+            if (response == null || response.StatusCode == HttpStatusCode.NotFound) return false;
+            return true;
         }
 
         private static void SetupServer()
@@ -108,6 +138,7 @@ namespace MonitorService
             AddHeaders(client);
             try
             {
+                var q = Temperature.Temperatures;
                 ServerDetail serverDetails = new ServerDetail
                 {
                     Created = DateTime.Now,
@@ -118,7 +149,8 @@ namespace MonitorService
                     RamTotal = Convert.ToInt32(GetTotalMemoryInBytes()),
                     BytesReceived = bytesReceived,
                     BytesSent = bytesSent,
-                    ServerId = ServerId
+                    ServerId = ServerId,
+                    Temperature = Convert.ToDecimal(q.FirstOrDefault(x => x.CurrentValue >= 0)?.CurrentValue)
          
                 };
                 bytesSent = 0;
@@ -155,7 +187,7 @@ namespace MonitorService
             try
             {
                 Console.WriteLine("Sending server...");
-                response = await client.PostAsJsonAsync("api/Servers", server);
+                response = await client.PostAsJsonAsync("api/Servers/PostServer/", server);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     Console.WriteLine("Successfully sent");
@@ -173,15 +205,12 @@ namespace MonitorService
                 log.Info("CreateServerDetailAsync - Error " + e);
                 
             }
-            if (response != null)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                var s = JsonConvert.DeserializeObject<Server>(json);
+            if (response == null) return null;
+            var json = await response.Content.ReadAsStringAsync();
+            var s = JsonConvert.DeserializeObject<Server>(json);
 
-                // Return the URI of the created resource.
-                return s;
-            }
-            return null;
+            // Return the URI of the created resource.
+            return s;
         }
 
         static async Task<Uri> CreateServerDetailAsync(ServerDetail serverDetails, HttpClient client)
@@ -190,7 +219,7 @@ namespace MonitorService
             try
             {
                 Console.WriteLine("Sending server data...");
-                response = await client.PostAsJsonAsync("api/ServerDetails", serverDetails);
+                response = await client.PostAsJsonAsync("api/ServerDetails/PostServerDetail/", serverDetails);
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     Console.WriteLine("Successfully sent information");
