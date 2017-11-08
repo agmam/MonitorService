@@ -152,9 +152,9 @@ namespace MonitorService
                     BytesSent = bytesSent,
                     ServerId = ServerId,
                     Temperature = Convert.ToDecimal(q.FirstOrDefault(x => x.CurrentValue >= 0)?.CurrentValue),
-                    NetworkUtilization = Convert.ToDecimal(GetNetworkUtilization(GetNetworkCard()))
+                    NetworkUtilization = Convert.ToDecimal(GetNetworkUtilization(GetNetworkCard())),
+                    Handles =Convert.ToDecimal(GetProcesses())
                     
-         
                 };
                 bytesSent = 0;
                 bytesReceived = 0;
