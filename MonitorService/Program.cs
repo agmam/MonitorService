@@ -66,10 +66,10 @@ namespace MonitorService
             while (true)
             {
                
-                Networkcalc.ShowNetworkTraffic();
-               // Thread.Sleep(6000);
+                //Networkcalc.ShowNetworkTraffic();
+               Thread.Sleep(6000);
                      
-               //SendServerInfo();
+               SendServerInfo();
             }
         }
 
