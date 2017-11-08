@@ -65,10 +65,11 @@ namespace MonitorService
             Console.WriteLine("server ID - ID:" + ServerId);
             while (true)
             {
-                //var q = Temperature.Temperatures;
-                Thread.Sleep(6000);
+               
+                Networkcalc.ShowNetworkTraffic();
+               // Thread.Sleep(6000);
                      
-               SendServerInfo();
+               //SendServerInfo();
             }
         }
 
@@ -150,7 +151,9 @@ namespace MonitorService
                     BytesReceived = bytesReceived,
                     BytesSent = bytesSent,
                     ServerId = ServerId,
-                    Temperature = Convert.ToDecimal(q.FirstOrDefault(x => x.CurrentValue >= 0)?.CurrentValue)
+                    Temperature = Convert.ToDecimal(q.FirstOrDefault(x => x.CurrentValue >= 0)?.CurrentValue),
+                    NetworkUtilization = Convert.ToDecimal(GetNetworkUtilization(GetNetworkCard()))
+                    
          
                 };
                 bytesSent = 0;
@@ -300,7 +303,7 @@ namespace MonitorService
 
             double utilization = (8 * (dataSent + dataReceived)) / (bandwidth * numberOfIterations) * 100;
             int u = Convert.ToInt32(utilization);
-
+            Console.WriteLine("                network :  "+ u);
             return u;
         }
 
@@ -319,7 +322,7 @@ namespace MonitorService
 
             foreach (string name in instancename)
             {
-                Console.WriteLine(name);
+               // Console.WriteLine(name);
                 if (name.Contains("Wireless") || name.Contains("Gigabit Network"))
                 {
                     networkCard = name;
