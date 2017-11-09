@@ -42,7 +42,7 @@ namespace MonitorService
         {
             upTime = new PerformanceCounter("System", "System Up Time");
             cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-            cpuCounter.NextValue(); //always 0
+            cpuCounter.NextValue(); //always 0 
             ramCounter = new PerformanceCounter("Memory", "Available MBytes");
             computerinfo = new ComputerInfo();
             //Network.getNetworkCardName();
@@ -303,7 +303,6 @@ namespace MonitorService
 
             double utilization = (8 * (dataSent + dataReceived)) / (bandwidth * numberOfIterations) * 100;
             int u = Convert.ToInt32(utilization);
-            Console.WriteLine("                network :  "+ u);
             return u;
         }
 
