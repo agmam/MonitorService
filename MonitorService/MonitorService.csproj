@@ -75,6 +75,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API Connections\APISetup.cs" />
+    <Compile Include="API Connections\ServerConnector.cs" />
+    <Compile Include="API Connections\ServerDetailConnector.cs" />
+    <Compile Include="Login.cs" />
     <Compile Include="Network.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
