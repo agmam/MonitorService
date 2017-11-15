@@ -14,11 +14,13 @@ using System.Windows.Forms;
 using Microsoft.VisualBasic.Devices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Runtime.InteropServices;
 
 namespace MonitorService
 {
     class Program
     {
+
         public static string token = "";
 
 
@@ -40,15 +42,30 @@ namespace MonitorService
         private static int ServerId = 0;
         static void Main(string[] args)
         {
+            Temperature cc = new Temperature(); //for the constructor
             upTime = new PerformanceCounter("System", "System Up Time");
             cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
             cpuCounter.NextValue(); //always 0
             ramCounter = new PerformanceCounter("Memory", "Available MBytes");
             computerinfo = new ComputerInfo();
             //Network.getNetworkCardName();
-           
 
+            // for (int i = 0; i < 20; i++)
+            // {
+            //     Thread.Sleep(1000);
+            // GetNetworkUtilization(GetNetworkCard());
+            // }
+            // Console.ReadLine();
             
+            //for (int i = 0; i < 10; i++)
+            //{
+                //var temp = Temperature.Temperatures;
+                //var t = temp.HasValue ? Convert.ToDecimal(temp.GetValueOrDefault()) : 0;
+                //Console.WriteLine(t);
+                //Thread.Sleep(1000);
+            //}
+         
+
             Console.WriteLine("Main...");
 
             Login(Username, Password);
@@ -139,7 +156,7 @@ namespace MonitorService
             AddHeaders(client);
             try
             {
-                var q = Temperature.Temperatures;
+                var temp = Temperature.Temperatures;
                 ServerDetail serverDetails = new ServerDetail
                 {
                     Created = DateTime.Now,
@@ -151,8 +168,8 @@ namespace MonitorService
                     BytesReceived = bytesReceived,
                     BytesSent = bytesSent,
                     ServerId = ServerId,
-                    Temperature = Convert.ToDecimal(q.FirstOrDefault(x => x.CurrentValue >= 0)?.CurrentValue),
-                    NetworkUtilization = Convert.ToDecimal(GetNetworkUtilization(GetNetworkCard())),
+                    Temperature = temp.HasValue ? Convert.ToDecimal(temp.GetValueOrDefault()) : 0,
+                    NetworkUtilization = 0,// Convert.ToDecimal(GetNetworkUtilization(GetNetworkCard())),
                     Handles =Convert.ToDecimal(GetProcesses())
                     
                 };
@@ -278,12 +295,12 @@ namespace MonitorService
         private static int GetNetworkUtilization(string networkCard)
         {
             const int numberOfIterations = 10;
-
-            PerformanceCounter bandwidthCounter = new PerformanceCounter("Network Interface", "Current Bandwidth", networkCard);
+            var q = "Network Interface";
+            var s = "/namespace:/root/CIMV2/Win32_PerfFormattedData_Tcpip_NetworkInterface";
+            PerformanceCounter bandwidthCounter = new PerformanceCounter(s, "Current Bandwidth", networkCard);
             float bandwidth = bandwidthCounter.NextValue();//valor fixo 10Mb/100Mn/
-            PerformanceCounter dataSentCounter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", networkCard);
-
-            PerformanceCounter dataReceivedCounter = new PerformanceCounter("Network Interface", "Bytes Received/sec", networkCard);
+            PerformanceCounter dataSentCounter = new PerformanceCounter(s, "Bytes Sent/sec", networkCard);
+            PerformanceCounter dataReceivedCounter = new PerformanceCounter(s, "Bytes Received/sec", networkCard);
 
             float sendSum = 0;
             float receiveSum = 0;
@@ -299,11 +316,13 @@ namespace MonitorService
             //How to do this proper?
             bytesSent = Convert.ToInt32(dataSent);
             bytesReceived = Convert.ToInt32(dataReceived);
+            Console.WriteLine("bytesReceived :  {0}", bytesReceived);
+            Console.WriteLine("bytesSent :  {0}",bytesSent);
 
 
             double utilization = (8 * (dataSent + dataReceived)) / (bandwidth * numberOfIterations) * 100;
             int u = Convert.ToInt32(utilization);
-            Console.WriteLine("                network :  "+ u);
+            Console.WriteLine("Utilization :  "+ u);
             return u;
         }
 
