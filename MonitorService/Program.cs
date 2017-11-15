@@ -16,12 +16,13 @@ using Microsoft.VisualBasic.Devices;
 using MonitorService.API_Connections;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Runtime.InteropServices;
 
 namespace MonitorService
 {
     class Program
     {
-        public static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public static string token = "";
 
 
         public static ComputerInfo computerinfo;
@@ -43,12 +44,16 @@ namespace MonitorService
 
         static void Main(string[] args)
         {
+            Temperature cc = new Temperature(); //for the constructor
             upTime = new PerformanceCounter("System", "System Up Time");
             cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
             cpuCounter.NextValue(); //always 0 
             ramCounter = new PerformanceCounter("Memory", "Available MBytes");
             computerinfo = new ComputerInfo();
+            //Network.getNetworkCardName();
+           
 
+            
             Console.WriteLine("Main...");
             Login.TryLogin(Username, Password);
             Console.WriteLine("Setting up server...");
