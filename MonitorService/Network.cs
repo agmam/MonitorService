@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Management;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading;
@@ -9,43 +10,60 @@ using System.Threading.Tasks;
 
 namespace MonitorService
 {
-    public static class Networkcalc
+    public static class Network
     {
-        public static void ShowNetworkTraffic()
+        public static int intervals = 0;
+        private static double accumulatedDataTotal = 0;
+        private static int AvgUtilization = 0;
+        public static void CalculateNetworkUtilization()
         {
-            PerformanceCounterCategory performanceCounterCategory = new PerformanceCounterCategory("Network Interface");
-            string instance = "";
-            
-            PerformanceCounterCategory category = new PerformanceCounterCategory("Network Interface");
-            String[] instancename = category.GetInstanceNames();
 
-            foreach (string name in instancename)
+            try
             {
-                // Console.WriteLine(name);
-                if (name.Contains("Wireless") || name.Contains("Gigabit Network"))
+                intervals++;
+                //We get the network interface used, which is the WiFi card.
+                //We get a list with the WiFi card and not a list of all network cards.
+                //WQL is WMI SQL some differences ex. LIKE vs CONTAINS
+                ObjectQuery colItems = new ObjectQuery("SELECT * FROM Win32_PerfFormattedData_Tcpip_NetworkInterface WHERE Name LIKE '%Wireless%'");
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(colItems);
+                ManagementObjectCollection result = searcher.Get();
+                //Initializion variables
+                double dataTotal = -1;
+                double utilization = 0;
+                double bandwidth = 0;
+                foreach (var sent in result)
                 {
-                    instance = name;
+                    dataTotal = Convert.ToDouble(sent["BytesTotalPersec"]);//Get the property BytesTotalPerSec
+                    accumulatedDataTotal += dataTotal;
+                    bandwidth = Convert.ToDouble(sent["CurrentBandwidth"]);
+                    break;
                 }
+                if (intervals < 1)
+                {
+                   intervals = 1; 
+                }
+                utilization = (((accumulatedDataTotal / intervals) * 8) / bandwidth) * 100;
+                AvgUtilization = Convert.ToInt32(utilization);
             }
-          
-            PerformanceCounter performanceCounterSent = new PerformanceCounter("Network Interface", "Bytes Sent/sec", instance);
-            PerformanceCounter performanceCounterReceived = new PerformanceCounter("Network Interface", "Bytes Received/sec", instance);
-            float bytesen = 0;
-            float bytesrec = 0;
-            for (int i = 0; i < 10; i++)
+            catch (Exception e)
             {
-                bytesen += performanceCounterSent.NextValue();
-                bytesrec += performanceCounterReceived.NextValue();
-                if (i%2 == 0)
-                {
-                    Console.WriteLine("bytes sent: {0}mbps\tbytes received: {1}mbps", Math.Round((bytesen / 1024)/1024), Math.Round((bytesrec / 1024) / 1024));
-                    bytesen = 0;
-                    bytesrec = 0;
-                }
-               
-                Thread.Sleep(500);
+                Console.WriteLine(e);
+                Program.log.Error("Network read error: " + e);
             }
+
         }
-       
+
+        public static void ResetNetwork()
+        {
+            intervals = 0;
+            accumulatedDataTotal = 0;
+            AvgUtilization = 0;
+        }
+
+        public static int GetNetworkUtilization()
+        {
+            return AvgUtilization;
+        }
+
     }
 }
