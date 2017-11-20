@@ -43,20 +43,6 @@ namespace MonitorService
                     }
                 }
                 return 0;
-
-
-                //List<Temperature> result = new List<Temperature>();
-                //ManagementObjectSearcher searcher =
-                //    new ManagementObjectSearcher(@"root\WMI", "SELECT * FROM MSAcpi_ThermalZoneTemperature");
-                //foreach (ManagementObject obj in searcher.Get())
-                //{
-                //    Double temp = Convert.ToDouble(obj["CurrentTemperature"].ToString());
-                //    temp = (temp - 2732) / 10.0;
-                //    result.Add(new Temperature {CurrentValue = temp, InstanceName = obj["InstanceName"].ToString()});
-                //    //Console.WriteLine("temp: " + temp+ "   instance: " + obj["InstanceName"].ToString());
-                //}
-                //return result;
-
             }
         }
     }

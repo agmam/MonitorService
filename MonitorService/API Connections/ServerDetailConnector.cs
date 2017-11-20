@@ -17,7 +17,7 @@ namespace MonitorService.API_Connections
             APISetup.AddHeaders(client);
             try
             {
-                var q = Temperature.Temperatures;
+                var temp = Temperature.Temperatures;
                 ServerDetail serverDetails = new ServerDetail
                 {
                     Created = DateTime.Now,
@@ -29,7 +29,7 @@ namespace MonitorService.API_Connections
                     BytesReceived = Program.bytesReceived,
                     BytesSent = Program.bytesSent,
                     ServerId = Program.ServerId,
-                    Temperature = Convert.ToDecimal(q.FirstOrDefault(x => x.CurrentValue >= 0)?.CurrentValue),
+                    Temperature = temp.HasValue ? Convert.ToDecimal(temp.GetValueOrDefault()) : 0,
                     NetworkUtilization = Convert.ToDecimal(Network.GetNetworkUtilization()),
                     Handles = Convert.ToDecimal(GetProcesses())
 

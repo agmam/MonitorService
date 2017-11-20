@@ -35,6 +35,7 @@ namespace MonitorService
 
         static string url = Properties.Settings.Default.WebApiUrl;
 
+        public static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         public static int bytesSent = 0;
         public static int bytesReceived = 0;
 
@@ -50,7 +51,6 @@ namespace MonitorService
             cpuCounter.NextValue(); //always 0 
             ramCounter = new PerformanceCounter("Memory", "Available MBytes");
             computerinfo = new ComputerInfo();
-            //Network.getNetworkCardName();
            
 
             
@@ -71,20 +71,23 @@ namespace MonitorService
             networkThread.Start();
             mainThread.Start();
         }
-
+        //1 Thread working
         static void NetworkThreadMethod()
         {
             while (true)
             {
+                //Get networks utilization 5 times each second
                 Network.CalculateNetworkUtilization();
                 Thread.Sleep(200);
             }
             
         }
+        //Another Thread working
         static void MainThreadMethod()
         {
             while (true)
             {
+                //Sends server info every 5 seconds
                 Thread.Sleep(5000);
                 Console.WriteLine(Network.GetNetworkUtilization() + " %");
                 ServerDetailConnector.SendServerInfo();
