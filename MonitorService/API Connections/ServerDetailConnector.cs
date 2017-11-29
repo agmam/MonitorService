@@ -33,7 +33,8 @@ namespace MonitorService.API_Connections
                     NetworkUtilization = Convert.ToDecimal(Network.GetNetworkUtilization()),
                     HarddiskUsedSpace = Convert.ToDecimal(HarddiskStatus.UsedDiskSpace()),
                     HarddiskTotalSpace = Convert.ToDecimal(HarddiskStatus.TotalDiskSpace()),
-                    Handles = Convert.ToDecimal(GetProcesses())
+                    Handles = Convert.ToDecimal(GetHandles()),
+                    Threads = Convert.ToDecimal(GetThreads())
 
 
                 };
@@ -82,9 +83,24 @@ namespace MonitorService.API_Connections
             return Process.GetProcesses().Length;
         }
 
+        private static int GetHandles()
+        {
+            int handlecount = 0;
+            foreach (var process in Process.GetProcesses())
+            {
+                handlecount += process.HandleCount;
+            }
+            return handlecount;
+        }
+
         private static int GetThreads()
         {
-            return Process.GetCurrentProcess().Threads.Count;
+            int threadcount = 0;
+            foreach (var process in Process.GetProcesses())
+            {
+                threadcount += process.Threads.Count;
+            }
+            return threadcount;
         }
 
         private static ulong GetTotalMemoryInBytes()

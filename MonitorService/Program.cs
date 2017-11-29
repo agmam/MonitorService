@@ -32,7 +32,6 @@ namespace MonitorService
 
         private static Thread networkThread;
         private static Thread mainThread;
-        private static Thread harddiskThread;
 
         static string url = Properties.Settings.Default.WebApiUrl;
 

@@ -21,6 +21,7 @@ namespace MonitorService
         public decimal NetworkUtilization { get; set; }
         public decimal HarddiskUsedSpace { get; set; }
         public decimal HarddiskTotalSpace { get; set; }
+        public decimal Threads { get; set; }
         public decimal Handles { get; set; }
         public decimal Processes { get; set; }
         public decimal Temperature { get; set; }
