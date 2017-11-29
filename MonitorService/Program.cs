@@ -32,6 +32,7 @@ namespace MonitorService
 
         private static Thread networkThread;
         private static Thread mainThread;
+        private static Thread harddiskThread;
 
         static string url = Properties.Settings.Default.WebApiUrl;
 
@@ -82,6 +83,7 @@ namespace MonitorService
             }
             
         }
+
         //Another Thread working
         static void MainThreadMethod()
         {
@@ -90,6 +92,8 @@ namespace MonitorService
                 //Sends server info every 5 seconds
                 Thread.Sleep(5000);
                 Console.WriteLine(Network.GetNetworkUtilization() + " %");
+                Console.WriteLine(HarddiskStatus.UsedDiskSpace() + "GB - used disk space");
+                Console.WriteLine(HarddiskStatus.TotalDiskSpace() + "GB - total disk space");
                 ServerDetailConnector.SendServerInfo();
             }
             

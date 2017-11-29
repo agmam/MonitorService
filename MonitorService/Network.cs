@@ -24,7 +24,7 @@ namespace MonitorService
                 //We get the network interface used, which is the WiFi card.
                 //We get a list with the WiFi card and not a list of all network cards.
                 //WQL is WMI SQL some differences ex. LIKE vs CONTAINS
-                ObjectQuery colItems = new ObjectQuery("SELECT * FROM Win32_PerfFormattedData_Tcpip_NetworkInterface WHERE Name LIKE '%Realtek%'");  
+                ObjectQuery colItems = new ObjectQuery("SELECT * FROM Win32_PerfFormattedData_Tcpip_NetworkInterface WHERE Name LIKE '%Wireless%'");  
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher(colItems);
                 ManagementObjectCollection result = searcher.Get();
                 //Initializion variables

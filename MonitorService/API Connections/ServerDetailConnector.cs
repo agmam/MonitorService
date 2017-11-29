@@ -31,6 +31,8 @@ namespace MonitorService.API_Connections
                     ServerId = Program.ServerId,
                     Temperature = temp.HasValue ? Convert.ToDecimal(temp.GetValueOrDefault()) : 0,
                     NetworkUtilization = Convert.ToDecimal(Network.GetNetworkUtilization()),
+                    HarddiskUsedSpace = Convert.ToDecimal(HarddiskStatus.UsedDiskSpace()),
+                    HarddiskTotalSpace = Convert.ToDecimal(HarddiskStatus.TotalDiskSpace()),
                     Handles = Convert.ToDecimal(GetProcesses())
 
 
