@@ -94,6 +94,7 @@ namespace MonitorService
                 Console.WriteLine(HarddiskStatus.UsedDiskSpace() + "GB - used disk space");
                 Console.WriteLine(HarddiskStatus.TotalDiskSpace() + "GB - total disk space");
                 ServerDetailConnector.SendServerInfo();
+
             }
             
         }
