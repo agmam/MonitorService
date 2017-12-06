@@ -17,6 +17,7 @@ using MonitorService.API_Connections;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace MonitorService
 {
@@ -51,25 +52,35 @@ namespace MonitorService
             cpuCounter.NextValue(); //always 0 
             ramCounter = new PerformanceCounter("Memory", "Available MBytes");
             computerinfo = new ComputerInfo();
-           
-
-            
-            Console.WriteLine("Main...");
-            Login.TryLogin(Username, Password);
             Console.WriteLine("Setting up server...");
-            ServerId = Properties.Settings.Default.ServerId;
-
-
-            if (!ServerConnector.IsServerInDatabase(ServerId))
+            try
             {
-                ServerConnector.SetupServer();
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "\\MonitorService.txt");
+                string text = File.ReadAllText(path);
+
+                Console.WriteLine(text);
+            }
+            catch(Exception ee)
+            {
+                Console.WriteLine("error" + ee);
             }
 
-            Console.WriteLine("server ID - ID:" + ServerId);
-            networkThread = new Thread(new ThreadStart(NetworkThreadMethod));
-            mainThread =  new Thread(new ThreadStart(MainThreadMethod));
-            networkThread.Start();
-            mainThread.Start();
+            Console.ReadLine();
+            //Login.TryLogin(Username, Password);
+            //Console.WriteLine("Setting up server...");
+            //ServerId = Properties.Settings.Default.ServerId;
+
+
+            //if (!ServerConnector.IsServerInDatabase(ServerId))
+            //{
+            //    ServerConnector.SetupServer();
+            //}
+
+            //Console.WriteLine("server ID - ID:" + ServerId);
+            //networkThread = new Thread(new ThreadStart(NetworkThreadMethod));
+            //mainThread =  new Thread(new ThreadStart(MainThreadMethod));
+            //networkThread.Start();
+            //mainThread.Start();
         }
         //1 Thread working
         static void NetworkThreadMethod()

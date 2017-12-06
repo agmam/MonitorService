@@ -104,7 +104,10 @@ namespace MonitorService.API_Connections
 
         private static string GetServerName()
         {
-            return Environment.MachineName;
+
+            return "";
+           
+            // return Environment.MachineName;
         }
     }
 }
