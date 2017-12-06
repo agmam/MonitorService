@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MonitorService.Properties;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace MonitorService.API_Connections
 {
@@ -104,10 +105,17 @@ namespace MonitorService.API_Connections
 
         private static string GetServerName()
         {
-
-            return "";
+            var path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            var filename = @"\MonitorService.txt";
+            path += filename;
+            string text = File.ReadAllText(path);
+            if (string.IsNullOrEmpty(text))
+            {
+                text = Environment.MachineName;
+            }
+            return text;
            
-            // return Environment.MachineName;
+            
         }
     }
 }

@@ -55,7 +55,9 @@ namespace MonitorService
             Console.WriteLine("Setting up server...");
             try
             {
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "\\MonitorService.txt");
+              var path =   System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                var filename = @"\MonitorService.txt";
+                path += filename;
                 string text = File.ReadAllText(path);
 
                 Console.WriteLine(text);

@@ -412,7 +412,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_450C06D17ED7B5BBE0B317C99AE596B2"
+        "OwnerKey" = "8:_1262B5948A1945EBAE4B38F9AF7BFD47"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -449,6 +449,24 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_9D8E232A03B7042500A1E23E5A1AF38E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_374CF642A36C84378206FD555157798A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_06A95C6469A5CD0E82FD3A400CE143AC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_450C06D17ED7B5BBE0B317C99AE596B2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -757,24 +775,6 @@
         "OwnerKey" = "8:_09C01F02B2526489F74CCCAF5673D5CC"
         "MsmSig" = "8:_UNDEFINED"
         }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1262B5948A1945EBAE4B38F9AF7BFD47"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_374CF642A36C84378206FD555157798A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_06A95C6469A5CD0E82FD3A400CE143AC"
-        "MsmSig" = "8:_UNDEFINED"
-        }
     }
     "Configurations"
     {
@@ -793,6 +793,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -809,6 +817,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.5"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.5 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.5"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -828,6 +852,20 @@
             "Identifier" = "8:_DAC5B591_D3B1_41D2_B900_3F156AB8A555"
             "InstallerClass" = "11:TRUE"
             "CustomActionData" = "8:/KeyValue=\"[SERVERNAME]\""
+            }
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_FDC6E18846E242B2B672C59B399C28C1"
+            {
+            "Name" = "8:Primary output from MonitorService (Active)"
+            "Condition" = "8:"
+            "Object" = "8:_1262B5948A1945EBAE4B38F9AF7BFD47"
+            "FileType" = "3:2"
+            "InstallAction" = "3:2"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_1E15465F_D094_4834_9A2C_8FD1C70C87BC"
+            "InstallerClass" = "11:TRUE"
+            "CustomActionData" = "8:"
             }
         }
         "DefaultFeature"
@@ -2800,7 +2838,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Monitor service"
         "ProductCode" = "8:{E8F10D49-11BD-4606-BCFF-5E4C5F81FC3C}"
-        "PackageCode" = "8:{08426776-AABE-4F9A-8D87-301BB3A1F0F3}"
+        "PackageCode" = "8:{E7697963-D73D-4F97-8769-2F0D8CA1DB97}"
         "UpgradeCode" = "8:{9D328603-E478-4607-9FCC-A88EC691B8F5}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
