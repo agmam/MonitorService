@@ -20,8 +20,9 @@ namespace MonitorService.API_Connections
             HttpResponseMessage response = null;
             try
             {
-                Console.WriteLine("geting server...");
+                Console.WriteLine("getting server...");
                 response = client.GetAsync("api/Servers/GetServer/" + id).Result;
+                
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     Console.WriteLine("Successfully");
@@ -39,7 +40,11 @@ namespace MonitorService.API_Connections
                 Program.log.Info("getServerAsync - Error " + e);
 
             }
-            if (response == null || response.StatusCode == HttpStatusCode.NotFound) return false;
+            if (response == null || response.StatusCode == HttpStatusCode.NotFound)
+            {
+               
+                return false;
+            }
             return true;
         }
 
@@ -61,6 +66,28 @@ namespace MonitorService.API_Connections
                     Settings.Default.ServerId = s.Id;
                     Settings.Default.Save();
                     Program.ServerId = s.Id;
+                    try
+                    {
+                        var pathtoid = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                        var filenametoid = @"\MonitorServiceId.txt";
+                        pathtoid += filenametoid;
+
+                        if (File.Exists(pathtoid))
+                        {
+                           File.Delete(pathtoid);
+                        }
+                     
+                            File.WriteAllText(pathtoid, s.Id + "");
+                        
+                        Settings.Default.ServerId = s.Id;
+                        Settings.Default.Save();
+                    }
+                    catch (Exception e)
+                    {
+
+                        Console.WriteLine("Id error: " + e);
+                       Program.log.Error("id error: " + e);
+                    }
                 }
 
             }

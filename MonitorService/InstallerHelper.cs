@@ -24,6 +24,7 @@ namespace MonitorService
             base.Commit(savedState);
             string sPath = Context.Parameters["assemblypath"];
             Process.Start(sPath);
+            
         }
         public override void Install(IDictionary stateSaver)
         {
@@ -36,15 +37,13 @@ namespace MonitorService
 
 
             string strKey = Context.Parameters["KeyValue"];
-
-            Settings.Default.ServerName = strKey;
-            Settings.Default.Save();
+        
+          
             
             string fName = "txt";
             string eName = "exe";
           sPath = sPath.Replace(eName, fName);
             
-            //string sPath = @"c:\Test.txt";
 
             if (File.Exists(sPath))
             { File.Delete(sPath);
