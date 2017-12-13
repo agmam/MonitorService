@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitorService", "MonitorService\MonitorService.csproj", "{D91CFD17-AAE9-4F7C-B48F-A14F13D9B074}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "SetupWizard\Setup\Setup.vdproj", "{84F7BB09-1ABA-4D36-98F7-118ECAD50D9E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{D91CFD17-AAE9-4F7C-B48F-A14F13D9B074}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D91CFD17-AAE9-4F7C-B48F-A14F13D9B074}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D91CFD17-AAE9-4F7C-B48F-A14F13D9B074}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84F7BB09-1ABA-4D36-98F7-118ECAD50D9E}.Debug|Any CPU.ActiveCfg = Debug
+		{84F7BB09-1ABA-4D36-98F7-118ECAD50D9E}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

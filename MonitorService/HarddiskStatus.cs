@@ -37,7 +37,7 @@ namespace MonitorService
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                Program.log.Error("Network read error: " + e);
+                Program.log.Error("Disk error: " + e);
             }
             return 0;
         }
@@ -64,7 +64,7 @@ namespace MonitorService
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                Program.log.Error("Network read error: " + e);
+                Program.log.Error("Disk read error: " + e);
             }
             return 0;
         }
