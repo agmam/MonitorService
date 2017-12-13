@@ -25,18 +25,6 @@ namespace MonitorService.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:3937")]
-        public string WebApiUrl {
-            get {
-                return ((string)(this["WebApiUrl"]));
-            }
-            set {
-                this["WebApiUrl"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int ServerId {
             get {
@@ -56,6 +44,18 @@ namespace MonitorService.Properties {
             }
             set {
                 this["ServerName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://servermonitorapibackend.azurewebsites.net")]
+        public string WebApiUrl {
+            get {
+                return ((string)(this["WebApiUrl"]));
+            }
+            set {
+                this["WebApiUrl"] = value;
             }
         }
     }

@@ -37,7 +37,7 @@ namespace MonitorService
                     HttpResponseMessage response = new HttpResponseMessage();
 
                     response = client.PostAsync("token", formContent).Result;
-
+                    Console.WriteLine(response.StatusCode);
                     if (response.IsSuccessStatusCode)
                     {
                         var responseJson = response.Content.ReadAsStringAsync().Result;
@@ -50,7 +50,7 @@ namespace MonitorService
                     else
                     {
                         log.Info("Login failed - check your credentials");
-                        Console.WriteLine("Exiting...");
+                        Console.WriteLine(" Login failed exiting...");
                         Thread.Sleep(5000);
                         Environment.Exit(0);
                     }
@@ -58,7 +58,7 @@ namespace MonitorService
                 catch (Exception e)
                 {
                     log.Info("No connection to web api");
-                    Console.WriteLine("Exiting...");
+                    Console.WriteLine("error login failed Exiting... : " +e);
                     Thread.Sleep(5000);
                     Environment.Exit(0);
                 }

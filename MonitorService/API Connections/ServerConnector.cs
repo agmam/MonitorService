@@ -135,7 +135,11 @@ namespace MonitorService.API_Connections
             var path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             var filename = @"\MonitorService.txt";
             path += filename;
-            string text = File.ReadAllText(path);
+            string text = null;
+            if (File.Exists(path))
+            {
+                text = File.ReadAllText(path);
+            }
             if (string.IsNullOrEmpty(text))
             {
                 text = Environment.MachineName;
