@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MonitorService
 {
-    public static class HarddiskStatus
+    public class HarddiskStatus
     {
         public static double TotalDiskSpace()
         {
