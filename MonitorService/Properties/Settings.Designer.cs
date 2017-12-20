@@ -49,7 +49,7 @@ namespace MonitorService.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://servermonitorapibackend.azurewebsites.net")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:3937")]
         public string WebApiUrl {
             get {
                 return ((string)(this["WebApiUrl"]));

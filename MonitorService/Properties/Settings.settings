@@ -9,7 +9,7 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="WebApiUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://servermonitorapibackend.azurewebsites.net</Value>
+      <Value Profile="(Default)">http://localhost:3937</Value>
     </Setting>
   </Settings>
 </SettingsFile>
