@@ -14,25 +14,18 @@ namespace MonitorService
         {
             try
             {
-                ObjectQuery TotalAmountDiskSpace = new ObjectQuery
+                ObjectQuery totalAmountDiskSpace = new ObjectQuery
                     ("SELECT * FROM Win32_DiskDrive");
                 ManagementObjectSearcher searcherTotalAmountDisk = new ManagementObjectSearcher
-                    (TotalAmountDiskSpace);
+                    (totalAmountDiskSpace);
                 ManagementObjectCollection resultTotalAmountDiskSpace = searcherTotalAmountDisk.Get();
-                double TotalDiskSpaces = 0;
-                double TotalDiskSpaceGB = 0;
-                foreach (var freeSpace in resultTotalAmountDiskSpace)
+             
+                foreach (var r in resultTotalAmountDiskSpace)
                 {
-                    //The size of the disk is calculated as followed: 
-                    //TotalCylinder * TracksPerCylinder * SectorsPerTrack * BytesInEachSector
-                    //So for a 512GB disk it is: 62260 * 255 * 63 * 512 = 512GB of disk storage total
-                    TotalDiskSpaces = Convert.ToDouble(freeSpace["Size"]); //Get the property Size
-                    TotalDiskSpaceGB = Math.Round(TotalDiskSpaces / 1000000000,0);
-                    return TotalDiskSpaceGB;
-                    //The return value will not match what windows task manager shows,
-                    //due to reserved hidden system files.
+                    double totalDiskSpace = Convert.ToDouble(r["Size"]);
+                    double totalDiskSpaceGB = Math.Round(totalDiskSpace / 1000000000,0);
+                    return totalDiskSpaceGB;
                 }
-
             }
             catch (Exception e)
             {

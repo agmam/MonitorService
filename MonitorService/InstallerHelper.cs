@@ -30,10 +30,10 @@ namespace MonitorService
         {
 
             base.Install(stateSaver);
-            RegistryKey rk = Registry.CurrentUser.OpenSubKey
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey // Finder registry hvor servicen skal ligge for at køre programmet på windows startup
            ("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string sPath = Context.Parameters["assemblypath"];
-            rk.SetValue("Monistor Service", sPath);
+            rk.SetValue("Monistor Service", sPath); //Gemmer servicen til denne registry
 
 
             string strKey = Context.Parameters["KeyValue"];

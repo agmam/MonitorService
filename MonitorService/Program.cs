@@ -1,23 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
-using System.Dynamic;
-using System.Linq;
-using System.Management;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Net.Mime;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Microsoft.VisualBasic.Devices;
 using MonitorService.API_Connections;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Runtime.InteropServices;
 using System.IO;
 
 namespace MonitorService
@@ -56,30 +41,12 @@ namespace MonitorService
             ramCounter = new PerformanceCounter("Memory", "Available MBytes");
             computerinfo = new ComputerInfo();
             Console.WriteLine("Setting up server...");
-            try
-            {
-                var path = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-                var filename = @"\MonitorService.txt";
-                path += filename;
-                string text = "";
-                if (File.Exists(path))
-                {
-                    text = File.ReadAllText(path);
-                }
-
-
-                Console.WriteLine(text);
-            }
-            catch (Exception ee)
-            {
-                Console.WriteLine("error" + ee);
-            }
-
+          
             Login.TryLogin(Username, Password);
             int id = 0;
             try
             {
-                var pathtoid = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+                var pathtoid = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
                 var filenametoid = @"\MonitorServiceId.txt";
                 pathtoid += filenametoid;
                 
